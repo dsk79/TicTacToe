@@ -1,39 +1,45 @@
 import math
-import pandas as pd
 import numpy as np
-
-# N x N board (always square, any size
-# M connected marks for a win
+import pandas as pd
 
 
 class Board:
     def __init__(self, length):
         self.rows = length
         self.cols = length
-#        self.board = pd.DataFrame();
-#        print('in init')
+        self.board = self.create_board()
 
     def create_board(self):
+        # N x N board (always square, any size)
         print('Hello world again')
 
-        self.board = np.full((self.rows, self.cols), fill_value=None)
-#      print(board)
+        return np.full((self.rows, self.cols), fill_value=None)
 
-        self.board[1][2] = 5
-        return self.board
 
     def set_mark(self, x, y, symbol):
-        if (x >= self.rows or x < 0 or y >= self.cols or y < 0):
-            print('Board  is greater than range', x, y)
+        if x >= self.rows or x < 0 or y >= self.cols or y < 0:
+            print('Coordinates are out of range', x, y)
             return False
 
         if self.board[x][y] is not None:
-            print("Board ", self.board[x][y], ' is none', x, y)
+            print("Coordinates is already marked ", self.board[x][y], x, y)
             return False
 
+        assert isinstance(symbol, str)
         self.board[x][y] = symbol
+        return self.board
 
-        return True
+    ''' Check for winning state with N connected marks along any row, col, or diagonal'''
+    def check_state(self):
+        if board[0][0] is None:
+            return False
+
+        for i in range (0, self.rows):
+            if self.board[i][1:] == self.board[i][:-1]:
+                return True
+
+
+        return False
 
     def sqrt(num, precision):
         low = 0.0

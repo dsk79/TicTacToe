@@ -12,11 +12,10 @@ class Board:
     def create_board(self):
         # N x N board (always square, any size)
         print('Hello world again')
-
         return np.full((self.rows, self.cols), fill_value=None)
 
-
-    def set_mark(self, x, y, symbol):
+    ''' Set a player's mark on the coordinates '''
+    def mark(self, x, y, symbol):
         if x >= self.rows or x < 0 or y >= self.cols or y < 0:
             print('Coordinates are out of range', x, y)
             return False
@@ -31,13 +30,56 @@ class Board:
 
     ''' Check for winning state with N connected marks along any row, col, or diagonal'''
     def check_state(self):
-        if board[0][0] is None:
-            return False
+        # check all columns
+        for i in range(0, self.cols):
+            symbol = self.board[0][i]
+            if symbol is None:
+                print("Found a none on column check, continuing")
+                continue
 
-        for i in range (0, self.rows):
-            if self.board[i][1:] == self.board[i][:-1]:
-                return True
+            print(self.board[:, i])
+            if np.all(symbol == self.board[:, i]):
+                print("match found on col: ", i, self.board[:, i])
+                return True, symbol
 
+        # check all rows
+        for i in range(0, self.rows):
+            symbol = self.board[i][0]
+            if symbol is None:
+                print("Found a none on row check, continuing")
+                continue
+
+            print(self.board[i, :])
+            if np.all(symbol == self.board[i, :]):
+                print("match found on row: ", i, self.board[i, :])
+                return True, symbol
+
+        # check both diagonals
+        symbol = self.board[0][0]
+        for i in range(0, self.rows):
+            if symbol is None:
+                print("Found a None on diagonal check, breaking")
+                break
+
+            if symbol != self.board[i][i]:
+                print("Found mismatch along diagonal at ", i, i)
+                break
+
+            print("Found a match on diagonal symbol ", symbol)
+            return True, symbol
+
+        symbol = self.board[self.rows-1][0]
+        for i in range(0, self.rows):
+            if symbol is None:
+                print("Found a None on reverse diagonal check, breaking")
+                break
+
+            if symbol != self.board[i][self.rows-1 - i]:
+                print("Found a None on reverse diagonal at ", i, self.rows-1-i )
+                break
+
+            print("Found a match on reverse diagonal symbol ", symbol)
+            return True, symbol
 
         return False
 

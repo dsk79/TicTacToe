@@ -6,6 +6,7 @@ from random import randint
 P1 = 'x'
 P2 = 'o'
 
+
 def main():
     # Set up new board
     game = Board(3)
@@ -13,8 +14,8 @@ def main():
     # Generate 2 players with starting money balances
     p1 = Player(P1, 1000)
     p2 = Player(P2, 5000)
-    print(p1.symbol, p1.money)
-    print(p2.symbol, p2.money)
+    print(p1.symbol, p1.balance)
+    print(p2.symbol, p2.balance)
 
     # Decide who goes first
     x = randint(0, 1)
@@ -25,14 +26,41 @@ def main():
     i = 0
 #   while not game.check_state():
     while True:
-        turn = p2 if turn == p1 else p1
-        print(turn.symbol, turn.label)
-        i = i+1
+#        turn = p2 if turn == p1 else p1
+#        print(turn.symbol, turn.label)
+#        i = i+1
 
-        if i == 10:
-            break;
+        p1_bid = p1.request_bid()
+        p2_bid = p2.request_bid()
 
-    test2(game)
+        if p1_bid > p2_bid:
+            current_player = p1
+        else:
+            current_player = p2
+
+        mark = current_player.symbol
+        print("\nCurrent player is ", current_player.label, " symbol is ", mark)
+        x, y = current_player.request_move(game)
+        print("Move selected is ", x, y, "\n")
+
+        game.mark(x, y, mark)
+        print(game.board, "\n-------------\n" )
+
+        terminal, symbol = game.check_state()
+
+        if terminal is True:
+            print("Terminal state found. ")
+            if symbol == -1:
+                print("Game is a draw.  Game took ", game.turn, " turns")
+            else:
+                print("Player ", symbol, " has won.  Game took ", game.turn, " turns.")
+
+            break
+
+#        if i == 10:
+#            break
+
+#    test2(game)
 
   #  print("Checking winning state", game.check_state())
 

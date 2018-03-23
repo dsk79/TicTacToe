@@ -1,5 +1,6 @@
 from Board import Board
 from Player import Player
+
 import numpy as np
 from random import randint
 
@@ -13,7 +14,7 @@ def main():
 
     # Generate 2 players with starting money balances
     p1 = Player(P1, 1000)
-    p2 = Player(P2, 5000)
+    p2 = Player(P2, 1000)
     print(p1.symbol, p1.balance)
     print(p2.symbol, p2.balance)
 
@@ -21,15 +22,11 @@ def main():
     x = randint(0, 1)
     turn = p1 if x == 0 else p2
 
-    print("initial", x, turn.symbol)
+    #print("initial", x, turn.symbol)
 
-    i = 0
-#   while not game.check_state():
     while True:
-#        turn = p2 if turn == p1 else p1
-#        print(turn.symbol, turn.label)
-#        i = i+1
-
+        # TODO: Need to handle same bids
+        # TODO: Need to handle when players have no more money
         p1_bid = p1.request_bid()
         p2_bid = p2.request_bid()
 
@@ -39,9 +36,9 @@ def main():
             current_player = p2
 
         mark = current_player.symbol
-        print("\nCurrent player is ", current_player.label, " symbol is ", mark)
+        print("\n(game engine)Current player is", current_player.label, "symbol is ", mark)
         x, y = current_player.request_move(game)
-        print("Move selected is ", x, y, "\n")
+        print("(game engine) Move selected is row", x, "col", y, "\n")
 
         game.mark(x, y, mark)
         print(game.board, "\n-------------\n" )
@@ -51,19 +48,11 @@ def main():
         if terminal is True:
             print("Terminal state found. ")
             if symbol == -1:
-                print("Game is a draw.  Game took ", game.turn, " turns")
+                print("Game is a draw.  Game took", game.turn, " turns")
             else:
-                print("Player ", symbol, " has won.  Game took ", game.turn, " turns.")
+                print(current_player.label, "(", symbol, ") has won.  Game took", game.turn, "turns.")
 
             break
-
-#        if i == 10:
-#            break
-
-#    test2(game)
-
-  #  print("Checking winning state", game.check_state())
-
 
 def test1(game):
     print(game.board[1][2])

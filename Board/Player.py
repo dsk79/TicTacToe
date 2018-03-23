@@ -1,3 +1,4 @@
+import random
 from random import randint
 
 
@@ -5,6 +6,7 @@ class Player:
     def __init__(self, symbol, amount):
         self.balance = amount
         self.symbol = symbol
+        self.current_bid = 0
 
         if symbol == 'x':
             self.label = 'Player 1'
@@ -13,6 +15,7 @@ class Player:
 
     def request_bid(self):
         bid = self.generate_bid()
+        self.current_bid = bid
         return bid
 
     def request_move(self, game):
@@ -21,23 +24,17 @@ class Player:
 
     def generate_bid(self):
         bid = randint(0, self.balance)
-        self.balance -= bid
-        print(self.label, "Generating bid of ", bid)
+        print("(player)", self.label, "Generating bid of ", bid, "current balance:", self.balance)
         return bid
 
     def generate_move(self, game):
-#        print(game.board)
+        self.balance -= self.current_bid
 
-        # More intelligent way will be to see which spaces are available and pick from only those spaces.
-        # Picking blindly and hoping for a space may lead to long run times in very big, nearly filled matrices
+        move = random.choice(game.valid_moves)
+        #print(game.valid_moves, move)
+        x = move // game.rows
+        y = move % game.rows
 
-        valid = False
-        while not valid:
-            x = randint(0, game.rows - 1)
-            y = randint(0, game.cols - 1)
-            if game.board[x][y] is None:
-                valid = True
-
-        print("Generating move of ", x, y)
+        print("(player)", self.label, "is generating move of row", x, "col", y, "Remaining balanace is", self.balance)
         return x, y
 

@@ -1,34 +1,31 @@
 from Board import Board
 from Player import Player
 
-import numpy as np
-from random import randint
-
 P1 = 'x'
 P2 = 'o'
 
 
 def main():
-    # Set up new board
-    game = Board(3)
-
     # Generate 2 players with starting money balances
     p1 = Player(P1, 1000)
     p2 = Player(P2, 1000)
     print(p1.symbol, p1.balance)
     print(p2.symbol, p2.balance)
 
-    # Decide who goes first
-    x = randint(0, 1)
-    turn = p1 if x == 0 else p2
+    # Set up new board
+    game = Board(4, p1, p2)
 
-    #print("initial", x, turn.symbol)
+    turn = 0
 
-    while True:
-        # TODO: Need to handle same bids
-        # TODO: Need to handle when players have no more money
-        p1_bid = p1.request_bid()
-        p2_bid = p2.request_bid()
+    game_over = False
+    while not game_over:
+        turn = update_turn(turn)
+
+        p1_bid = 0
+        p2_bid = 0
+        while p1_bid == p2_bid:
+            p1_bid = p1.request_bid(game)
+            p2_bid = p2.request_bid(game)
 
         if p1_bid > p2_bid:
             current_player = p1
@@ -38,21 +35,26 @@ def main():
         mark = current_player.symbol
         print("\n(game engine)Current player is", current_player.label, "symbol is ", mark)
         x, y = current_player.request_move(game)
-        print("(game engine) Move selected is row", x, "col", y, "\n")
+        print("(game engine) Move selected is row", x, "col", y,
+              "Player 1 balance: ", p1.balance, "\tPlayer 2 balance:", p2.balance, "\n")
 
         game.mark(x, y, mark)
-        print(game.board, "\n-------------\n" )
+        print(game.board, "\n\n------------------\n")
 
-        terminal, symbol = game.check_state()
+        game_over, symbol = game.check_state()
 
-        if terminal is True:
-            print("Terminal state found. ")
+        if game_over is True:
+            print("Terminal state found.")
             if symbol == -1:
-                print("Game is a draw.  Game took", game.turn, " turns")
+                print("Game is a draw.  Game took", turn, " turns")
             else:
-                print(current_player.label, "(", symbol, ") has won.  Game took", game.turn, "turns.")
+                print(current_player.label, "(" + symbol + ") has won.  Game took", turn, "turns.")
 
-            break
+
+def update_turn(turn):
+    turn += 1
+    print("Current turn is", turn ,"\n")
+    return turn
 
 def test1(game):
     print(game.board[1][2])

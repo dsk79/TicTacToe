@@ -2,12 +2,13 @@ import numpy as np
 
 
 class Board:
-    def __init__(self, length):
+    def __init__(self, length, p1, p2):
         self.rows = length
         self.cols = length
         self.board = self.create_board()
-        self.turn = 0
+ #       self.turn = 0
         self.valid_moves = list(range(0, self.rows * self.cols))
+        self.players = {"x": p1, "o": p2}
 
     def create_board(self):
         # N x N board (always square, any size)
@@ -25,7 +26,7 @@ class Board:
 
         assert isinstance(symbol, str)
         self.board[x][y] = symbol
-        self.turn += 1
+ #       self.turn += 1
         self.valid_moves.remove((self.rows * x) + y)
         return self.board
 

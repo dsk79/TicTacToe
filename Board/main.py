@@ -9,7 +9,7 @@ board_size = 3
 
 
 def main():
-    games_to_run = 1000
+    games_to_run = 100
 
     results = {'x': 0, 'o': 0, 'draw': 0}
 
@@ -51,6 +51,9 @@ def game_engine():
             current_player = p1
         else:
             current_player = p2
+
+        p1.update_balance(p1_bid, p2_bid)
+        p2.update_balance(p2_bid, p1_bid)
 
         mark = current_player.symbol
         print("\n(game engine)Current player is", current_player.label, "symbol is ", mark)

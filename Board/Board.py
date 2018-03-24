@@ -6,7 +6,6 @@ class Board:
         self.rows = length
         self.cols = length
         self.board = self.create_board()
- #       self.turn = 0
         self.valid_moves = list(range(0, self.rows * self.cols))
         self.players = {"x": p1, "o": p2}
 
@@ -24,15 +23,14 @@ class Board:
             print("Coordinates is already marked ", self.board[x][y], x, y)
             return False
 
-        assert isinstance(symbol, str)
         self.board[x][y] = symbol
- #       self.turn += 1
         self.valid_moves.remove((self.rows * x) + y)
         return self.board
 
     ''' Check for winning state with N connected marks along any row, col, or diagonal'''
     def check_state(self):
         is_draw = True
+
         # check all columns
         for i in range(0, self.cols):
             # Check if a none exists in any column, that is sufficient to very a completed board or not

@@ -31,7 +31,7 @@ class Player:
         opponent_balance = opponent.balance
 
         bid = randint(0, self.balance)
-        if bid >= opponent_balance:
+        if self.balance > bid >= opponent_balance:
             bid = opponent_balance + 1
 
         print("(player)", self.label, "Generating bid of ", bid, "current balance:", self.balance)

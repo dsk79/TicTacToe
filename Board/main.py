@@ -3,17 +3,37 @@ from Player import Player
 
 P1 = 'x'
 P2 = 'o'
+p1_balance = 1000
+p2_balance = 1000
+board_size = 3
 
 
 def main():
-    # Generate 2 players with starting money balances
-    p1 = Player(P1, 1000)
-    p2 = Player(P2, 1000)
-    print(p1.symbol, p1.balance)
-    print(p2.symbol, p2.balance)
+    games_to_run = 1000
+
+    results = {'x': 0, 'o': 0, 'draw': 0}
+
+    for i in range(0, games_to_run):
+        print("*************************************************")
+        print("*******************  GAME ", i+1, " *******************")
+        print("*************************************************")
+        game_result = game_engine()
+        results[game_result] += 1
+
+    print('Wins:', results)
+
+
+def initialize_players():
+    p1 = Player(P1, p1_balance)
+    p2 = Player(P2, p2_balance)
+    return p1, p2
+
+
+def game_engine():
+    p1, p2 = initialize_players()
 
     # Set up new board
-    game = Board(4, p1, p2)
+    game = Board(board_size, p1, p2)
 
     turn = 0
 
@@ -46,10 +66,11 @@ def main():
         if game_over is True:
             print("Terminal state found.")
             if symbol == -1:
-                print("Game is a draw.  Game took", turn, " turns")
+                print("Game is a draw.  Game took", turn, " turns\n")
+                return "draw"
             else:
-                print(current_player.label, "(" + symbol + ") has won.  Game took", turn, "turns.")
-
+                print(current_player.label, "(" + symbol + ") has won.  Game took", turn, "turns.\n")
+                return symbol
 
 def update_turn(turn):
     turn += 1

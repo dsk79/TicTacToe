@@ -27,7 +27,7 @@ class Board:
         self.valid_moves.remove((self.rows * x) + y)
         return self.board
 
-    ''' Check for winning state with N connected marks along any row, col, or diagonal'''
+    ''' Check for winning state with N connected marks along any row, col, or diagonal '''
     def check_state(self):
         is_draw = True
 

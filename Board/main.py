@@ -1,8 +1,13 @@
 from Board import Board
 from Player import Player
 
+''' Symbol constants '''
+spacer = "***********************************************"
+half_spacer = "*******************"
 P1 = 'x'
 P2 = 'o'
+
+''' Configurable params '''
 p1_balance = 1000
 p2_balance = 1000
 board_size = 3
@@ -14,13 +19,11 @@ def main():
     results = {'x': 0, 'o': 0, 'draw': 0}
 
     for i in range(0, games_to_run):
-        print("*************************************************")
-        print("*******************  GAME ", i+1, " *******************")
-        print("*************************************************")
+        print(spacer + "\n" + half_spacer + " GAME ", i+1, half_spacer + "\n" + spacer)
         game_result = game_engine()
         results[game_result] += 1
 
-    print('Wins:', results)
+    print('Final results\nWins:', results)
 
 
 def initialize_players():
@@ -30,14 +33,15 @@ def initialize_players():
 
 
 def game_engine():
+    # Create the 2 players
     p1, p2 = initialize_players()
 
     # Set up new board
     game = Board(board_size, p1, p2)
 
     turn = 0
-
     game_over = False
+
     while not game_over:
         turn = update_turn(turn)
 
@@ -52,11 +56,13 @@ def game_engine():
         else:
             current_player = p2
 
+        # Reduce each player's balance by their bid, and increase by opponent's bid
         p1.update_balance(p1_bid, p2_bid)
         p2.update_balance(p2_bid, p1_bid)
 
         mark = current_player.symbol
         print("\n(game engine)Current player is", current_player.label, "symbol is ", mark)
+
         x, y = current_player.request_move(game)
         print("(game engine) Move selected is row", x, "col", y,
               "Player 1 balance: ", p1.balance, "\tPlayer 2 balance:", p2.balance, "\n")
@@ -75,94 +81,12 @@ def game_engine():
                 print(current_player.label, "(" + symbol + ") has won.  Game took", turn, "turns.\n")
                 return symbol
 
+
 def update_turn(turn):
     turn += 1
-    print("Current turn is", turn ,"\n")
+    print("Current turn is", turn, "\n")
     return turn
 
-def test1(game):
-    print(game.board[1][2])
-
-    print(game.mark(1, 2, 'x'))
-    print(game.board[1][2])
-
-    print(game.mark(1, 3, 'o'))
-    print(game.mark(5, 1, 'x'))
-    print(game.mark(1, 5, 'o'))
-    print(game.mark(1, 6, 'x'))
-    print(game.mark(6, 1, 'x'))
-    print(game.mark(0, 0, 'o'))
-    print(game.mark(3, 0, 'x'))
-
-def test2(game):
-#    game.mark(0, 0, 'x')
-#    game.mark(0, 1, 'x')
-    #game.mark(0, 0, 'x')
-    game.mark(1, 1, 'x')
-#    game.mark(1, 1, 'x')
-    game.mark(1, 2, 'o')
-    #game.mark(2, 0, 'p')
-#    game.mark(2, 1, 'x')
-    game.mark(2, 2, 'x')
-    print(game.board)
-
-    game.check_state()
-
-    '''
-    temp2 = temp == game.board[0, :]
-    print(game.board[0, :])
-    print(temp2)
-
-    temp2 = temp == game.board[1, :]
-    print(game.board[1, :])
-    print(temp2)
-
-    temp2 = temp == game.board[2, :]
-    print(game.board[2, :])
-    print(temp2)
-    '''
-
-    #temp2 = temp == game.board[:, 0]
-    #print(game.board[:, 0])
-    #print(temp2)
-
-   # temp2 = temp == game.board[:, 1]
-   # print(game.board[:, 1])
-   # print(temp2)
-
-   # temp2 = temp == game.board[:, 2]
-   # print(game.board[:, 2])
-  #  print(temp2)
-
-  #  a = np.all(temp == game.board[0, :])
-  #  print(a)
-
-  #  a = np.all(temp == game.board[1, :])
-  #  print(a)
-
-  #  a = np.all(temp == game.board[2, :])
-  #  print(a)
-
- #   a = np.all(temp == game.board[:, 0])
- #   print(a)
- #   a = np.all(temp == game.board[:, 1])
- #   print(a)
- #   a = np.all(temp == game.board[:, 2])
- #   print(a)
-
-#    print(game.board[0, :])
-#    print(game.board[1, :])
-#    print(game.board[2, :])
-#    print(game.board[:, 0])
-#    print(game.board[:, 1])
-#    print(game.board[:, 2])
-
-
-#    print(game.board[0])
-#    print(game.board[0][1:])
-#    print(game.board[0][:-1])
-#    print(game.board[0][1:] == game.board[0][:-1])
-       # self.board[i][1:] == self.board[i][:-1]:
 
 if __name__ == '__main__':
     main()
